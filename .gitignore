@@ -1,0 +1,5 @@
+build/
+minidbg
+*.o
+*.out
+*.log
