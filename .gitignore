@@ -3,3 +3,5 @@ minidbg
 *.o
 *.out
 *.log
+.gdb_history
+peda-session-*.txt
