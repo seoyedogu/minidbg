@@ -5,3 +5,5 @@ minidbg
 *.log
 .gdb_history
 peda-session-*.txt
+.gdb_history
+peda-session-*.txt
