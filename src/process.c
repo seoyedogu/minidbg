@@ -42,7 +42,7 @@ pid_t proc_run(const char *path, char *const argv[]) {
                 int sig = WSTOPSIG(status);
                 if (sig == SIGTRAP) {
                     printf("[+] 프로그램 실행 준비 완료\n");
-                    ptrace(PTRACE_CONT, pid, 0,0);
+                    // ptrace(PTRACE_CONT, pid, 0,0);
                     usleep(100000); // 프롬프트 대기 시간
                     break;
                 } else {

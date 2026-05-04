@@ -3,6 +3,7 @@
 #include <string.h>
 #include "process.h"
 #include <sys/wait.h>
+#include "registers.h"
 
 #define MAX_INPUT 256
 #define MAX_ARGS  16
@@ -48,6 +49,12 @@ int main(void) {
                 continue;
             }
             pid = proc_run(args[0], args);
+        } else if (strcmp(cmd, "regs") ==0) {
+            if(pid <= 0) {
+                printf("[-] 실행 중인 프로세스가 없습니다\n");
+                continue;
+            }
+            regs_print(pid);
         } else if (strcmp(cmd, "quit") == 0 || strcmp(cmd, "q") == 0) {
             if (pid > 0) {
                 int status;
@@ -64,6 +71,7 @@ int main(void) {
             printf("명령어 목록:\n");
             printf("  run <prog>  프로그램 실행\n");
             printf("  quit        종료\n");
+            printf("  regs        레지스터 출력\n");
 
         } else {
             printf("[-] 알 수 없는 명령어: %s\n", cmd);
