@@ -55,6 +55,17 @@ int main(void) {
                 continue;
             }
             regs_print(pid);
+        } else if (strcmp(cmd, "set")==0) {
+            if (pid <=0) {
+                printf("[-] 실행 중인 프로세스가 없습니다\n");
+                continue;
+            }
+            if (argc <2) {
+                printf("사용법 : set <레지스터> <값>");
+                continue;
+            }
+            unsigned long val = strtoull(args[1], NULL, 16);
+            regs_set(pid, args[0], val);
         } else if (strcmp(cmd, "quit") == 0 || strcmp(cmd, "q") == 0) {
             if (pid > 0) {
                 int status;
@@ -72,6 +83,7 @@ int main(void) {
             printf("  run <prog>  프로그램 실행\n");
             printf("  quit        종료\n");
             printf("  regs        레지스터 출력\n");
+            printf("  set <reg> <val> 레지스터 수정\n");
 
         } else {
             printf("[-] 알 수 없는 명령어: %s\n", cmd);
