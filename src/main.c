@@ -3,6 +3,8 @@
 #include <string.h>
 #include "process.h"
 #include <sys/wait.h>
+#include "registers.h"
+#include "memory.h"
 
 #define MAX_INPUT 256
 #define MAX_ARGS  16
@@ -48,7 +50,49 @@ int main(void) {
                 continue;
             }
             pid = proc_run(args[0], args);
-        } else if (strcmp(cmd, "quit") == 0 || strcmp(cmd, "q") == 0) {
+        } else if (strcmp(cmd, "regs") ==0) {
+            if(pid <= 0) {
+                printf("[-] 실행 중인 프로세스가 없습니다\n");
+                continue;
+            }
+            regs_print(pid);
+        } else if (strcmp(cmd, "set")==0) {
+            if (pid <=0) {
+                printf("[-] 실행 중인 프로세스가 없습니다\n");
+                continue;
+            }
+            if (argc <2) {
+                printf("사용법 : set <레지스터> <값>");
+                continue;
+            }
+            unsigned long val = strtoull(args[1], NULL, 16);
+            regs_set(pid, args[0], val);
+        } else if (strcmp(cmd, "mem") == 0) {
+            if (pid <= 0) {
+                printf("[-] 실행 중인 프로세스가 없습니다\n");
+                continue;
+            }
+            if (argc < 1) {
+                printf("사용법: mem <주소> [길이]\n");
+                continue;
+            }
+            unsigned long addr = strtoull(args[0], NULL, 16);
+            int len = (argc > 2) ? atoi(args[1]) : 32;
+            mem_dump(pid, addr, len);
+        } else if (strcmp(cmd. "write") == 0) {
+            if (pid <=0) {
+                printf("[-] 실행 중인 프로세스가 없습니다\n");
+                continue;
+            }
+            if (argc <2) {
+                printf("사용법: write <주소> <값>\n");
+                continue;
+            }
+            unsigned long addr = strtoull(args[0], NULL, 16);
+            unsigned long val = strtoull(args[1], NULL, 16);
+            mem_write(pid, addr, val);
+        }
+         (strcmp(cmd, "quit") == 0 || strcmp(cmd, "q") == 0) {
             if (pid > 0) {
                 int status;
                 if (waitpid(pid, &status, WNOHANG) == pid) {
@@ -64,6 +108,10 @@ int main(void) {
             printf("명령어 목록:\n");
             printf("  run <prog>  프로그램 실행\n");
             printf("  quit        종료\n");
+            printf("  regs        레지스터 출력\n");
+            printf("  set <reg> <val> 레지스터 수정\n");
+            printf("  mem <addr> [len] 메모리 덤프\n");
+            printf("  write <addr> <val> 메모리 쓰기\n");
 
         } else {
             printf("[-] 알 수 없는 명령어: %s\n", cmd);
