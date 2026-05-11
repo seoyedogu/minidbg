@@ -79,7 +79,7 @@ int main(void) {
             unsigned long addr = strtoull(args[0], NULL, 16);
             int len = (argc > 2) ? atoi(args[1]) : 32;
             mem_dump(pid, addr, len);
-        } else if (strcmp(cmd. "write") == 0) {
+        } else if (strcmp(cmd, "write") == 0) {
             if (pid <=0) {
                 printf("[-] 실행 중인 프로세스가 없습니다\n");
                 continue;
@@ -91,8 +91,7 @@ int main(void) {
             unsigned long addr = strtoull(args[0], NULL, 16);
             unsigned long val = strtoull(args[1], NULL, 16);
             mem_write(pid, addr, val);
-        }
-         (strcmp(cmd, "quit") == 0 || strcmp(cmd, "q") == 0) {
+        } else if (strcmp(cmd, "quit") == 0 || strcmp(cmd, "q") == 0) {
             if (pid > 0) {
                 int status;
                 if (waitpid(pid, &status, WNOHANG) == pid) {

@@ -11,7 +11,7 @@ void mem_dump(pid_t pid, unsigned long addr, int len) {
             perror("[-] PEEKDATA 실패");
             return;
         }
-        printf("0x%0161x: ", addr + i);
+        printf("0x%016lx: ", addr + i);
     
         unsigned char *bytes = (unsigned char *)&data;
         for (int j = 0; j < 8; j++) {
@@ -26,5 +26,5 @@ void mem_write(pid_t pid, unsigned long addr, unsigned long val) {
         perror("[-] POKEDATA 실패");
         return;
     }
-    printf("[+] 0x%0161x 에 0x%0161x 작성 완료\n", addr, val);
+    printf("[+] 0x%016lx 에 0x%016lx 작성 완료\n", addr, val);
 }
